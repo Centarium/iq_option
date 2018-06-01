@@ -1,7 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nikita
- * Date: 01.06.18
- * Time: 11:01
- */
+include_once __DIR__.'/bundles/Router.php';
+
+
+use Bundles\Router;
+
+$router = new Router();
+$router->setControllerPath (__DIR__.'/controllers/');
+$router->setViewPath (__DIR__.'/view/');
+
+$router->delegateRoute();
