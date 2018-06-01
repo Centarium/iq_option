@@ -5,8 +5,14 @@ include_once __DIR__.'/Controller.php';
 
 use Exception;
 
+/**
+ * Class Router (Registry)
+ * @package Bundles
+ */
 class Router
 {
+    private static $instance;
+
     private $controllerPath;
     private $templatePath;
     private $extension='.php';
@@ -18,70 +24,110 @@ class Router
     private $defaultController = 'index';
     private $defaultAction = 'index';
 
+    static function getInstance()
+    {
+        if( !isset( self::$instance ) )
+        {
+            self::$instance = new self();
+        }
 
-    public function __construct() {
+        return self::$instance;
+    }
+
+    private function __construct() {
         $this->setRouteInfo();
     }
 
-    public function setControllerPath($path) {
+    public function setControllerPath(string $path):void {
 
-        if (is_dir($path) == false) {
+        if (is_dir($path) === false) {
             throw new Exception ('Invalid controller path: `' . $path . '`');
         }
 
         $this->controllerPath = $path;
     }
 
-    public function setViewPath($path) {
+    public function setViewPath(string $path):void {
 
-        if (is_dir($path) == false) {
+        if (is_dir($path) === false) {
             throw new Exception ('Invalid view path: `' . $path . '`');
         }
 
         $this->templatePath = $path;
     }
 
-
     /**
-     * @return mixed
+     * @return string
      */
-    public function getController()
+    public function getController():string
     {
         return ucfirst($this->controller).'Controller';
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getAction()
+    public function getTemplatePath():string
+    {
+        return $this->templatePath;
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function getViewFolder():string
+    {
+        $templatePath = $this->getTemplatePath();
+        $controller = $this->getController();
+        $viewFolder = strtolower(str_replace('Controller','',$controller));
+
+        $viewFolderPath = $templatePath.$viewFolder;
+
+        if( is_dir($viewFolderPath) === false )
+        {
+            throw new Exception ('Invalid view path: `' . $viewFolderPath . '`');
+        }
+
+        return $viewFolderPath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAction():string
     {
         return $this->action;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getArguments()
+    public function getArguments():array
     {
         return $this->arguments;
     }
 
-    protected function setController($controller)
+    /**
+     * @param string $controller
+     * @return string
+     */
+    private function setController(string $controller):string
     {
         $this->controller = $controller;
     }
 
-    protected function setAction($action)
+    private function setAction(string $action):void
     {
         $this->action = $action;
     }
 
-    protected function setArguments($args=[])
+    private function setArguments(array $args=[]):void
     {
         $this->arguments = $args;
     }
 
-    public function setRouteInfo()
+    private function setRouteInfo():void
     {
         $route = trim($_GET['route'], '/\\');
         $args = [];
@@ -99,12 +145,15 @@ class Router
         $this->setArguments($args);
     }
 
-    public function delegateRoute()
+    public function delegateRoute():void
     {
+        /**
+         * @var Controller $controllerClass
+         */
         $controller = $this->getController();
         $action = $this->getAction();
 
-        $file = $this->path.$controller.$this->extension;
+        $file = $this->controllerPath.$controller.$this->extension;
 
         if (is_readable($file) == false) {
             die ('404 Not Found');
@@ -120,9 +169,6 @@ class Router
         if (is_callable(array($controllerClass, $action)) == false) {
             die ('404 Not Found');
         }
-
-        $controllerClass->setArgs( $this->getArguments() );
-        $controllerClass->setTemplate( $this->templatePath );
 
         //Exec action
         $controllerClass->$action();

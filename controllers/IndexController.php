@@ -11,6 +11,8 @@ Class IndexController extends Controller
 
     function view()
     {
-        echo 'Hello from my MVC 123 system';
+        $this->render('index', [
+            'ver' => 'fred'
+        ]);
     }
 }

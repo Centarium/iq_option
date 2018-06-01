@@ -1,25 +1,49 @@
 <?php
 namespace Bundles;
 
+use Bundles\Router;
+
+/**
+ * Class Controller
+ * @package Bundles
+ */
 abstract class Controller {
 
     protected $args;
     protected $viewPath;
 
-    public function setArgs($args=[])
+    private $extension = '.php';
+
+    public function __construct()
     {
-        $this->$args = $args;
+        $this->setArgs();
     }
 
-    public function setTemplate($view)
+
+    private function setArgs():void
     {
-        $this->viewPath = $view;
+        $this->args = Router::getInstance()->getArguments();
     }
 
-    protected function render($view, $args)
+    /**
+     * @param $view
+     * @param array $args
+     * @throws \Exception
+     */
+    protected function render(string $view, array $args=[]):void
     {
+        $viewFolder= Router::getInstance()->getViewFolder();
 
+        $viewFile = $viewFolder.'/'.$view.$this->extension;
+
+        if( is_file($viewFile) === false  )
+        {
+            throw new Exception ('Invalid view path: `' . $viewFile . '`');
+        }
+
+        extract($args);
+        include $viewFile;
     }
 
-    abstract function index();
+    abstract protected function index();
 }
