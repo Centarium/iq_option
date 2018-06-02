@@ -1,8 +1,6 @@
 <?php
 namespace Bundles;
 
-include_once __DIR__.'/Controller.php';
-
 use Exception;
 
 /**
@@ -59,9 +57,14 @@ class Router
     /**
      * @return string
      */
-    public function getController():string
+    public function getControllerClass():string
     {
-        return ucfirst($this->controller).'Controller';
+        return ucfirst($this->controller);
+    }
+
+    public function getControllerName():string
+    {
+        return strtolower($this->controller);
     }
 
     /**
@@ -79,8 +82,7 @@ class Router
     public function getViewFolder():string
     {
         $templatePath = $this->getTemplatePath();
-        $controller = $this->getController();
-        $viewFolder = strtolower(str_replace('Controller','',$controller));
+        $viewFolder = $this->getControllerName();
 
         $viewFolderPath = $templatePath.$viewFolder;
 
@@ -112,7 +114,7 @@ class Router
      * @param string $controller
      * @return string
      */
-    private function setController(string $controller):string
+    private function setController(string $controller):void
     {
         $this->controller = $controller;
     }
@@ -150,7 +152,7 @@ class Router
         /**
          * @var Controller $controllerClass
          */
-        $controller = $this->getController();
+        $controller = $this->getControllerClass();
         $action = $this->getAction();
 
         $file = $this->controllerPath.$controller.$this->extension;
@@ -159,11 +161,9 @@ class Router
             die ('404 Not Found');
         }
 
-        //Add controller file
-        include ($file);
-
         //Init controller class
-        $controllerClass = new $controller();
+        $controllerClass = '\\Controllers\\'.$controller;
+        $controllerClass = new $controllerClass();
 
         //check action
         if (is_callable(array($controllerClass, $action)) == false) {
@@ -173,5 +173,4 @@ class Router
         //Exec action
         $controllerClass->$action();
     }
-
 }

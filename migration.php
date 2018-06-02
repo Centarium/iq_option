@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__.'/models/Comments.php';
+include_once __DIR__.'/vendor/autoload.php';
 
 use Models\Comments;
 
@@ -10,9 +10,13 @@ if( $type == '--migrateUp' )
 {
     $model->migrateUp();
 }
-elseif($type == '--migrateDown')
+if($type == '--migrateDown')
 {
     $model->migrateDown();
+}
+if($type == '--createData')
+{
+    $model->createData();
 }
 
 

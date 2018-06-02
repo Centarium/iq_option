@@ -1,12 +1,8 @@
 <?php
 namespace Bundles;
 
-include __DIR__.'/../config/Dev.php';
-include_once __DIR__.'/../interfaces/ConfigInterface.php';
-
 use Interfaces\ConfigInterface;
 use \Configs\Dev;
-
 
 class Config
 {

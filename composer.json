@@ -1,0 +1,17 @@
+{
+  "type": "project",
+  "license": "proprietary",
+  "minimum-stability": "dev",
+  "require": {
+    "php": "^7.2.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Controllers\\": "controllers/",
+      "Bundles\\": "bundles/",
+      "Models\\" : "models/",
+      "Interfaces\\": "interfaces/",
+      "Configs\\": "configs/"
+    }
+  }
+}

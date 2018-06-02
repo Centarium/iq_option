@@ -10,15 +10,20 @@ use Bundles\Router;
 abstract class Controller {
 
     protected $args;
-    protected $viewPath;
+    protected $controller;
 
     private $extension = '.php';
 
     public function __construct()
     {
         $this->setArgs();
+        $this->setControllerName();
     }
 
+    private function setControllerName():void
+    {
+        $this->controller = Router::getInstance()->getControllerName();
+    }
 
     private function setArgs():void
     {

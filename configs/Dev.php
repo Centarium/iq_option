@@ -1,8 +1,7 @@
 <?php
 namespace Configs;
-use Interfaces\ConfigInterface;
 
-include_once __DIR__.'/../interfaces/ConfigInterface.php';
+use Interfaces\ConfigInterface;
 
 Class Dev implements ConfigInterface
 {
@@ -15,6 +14,9 @@ Class Dev implements ConfigInterface
                 'dbname' => 'postgres',
                 'user' => 'root',
                 'pass' => 'admin'
+            ],
+            'errors' =>[
+                'display_errors' => 1
             ]
         ];
     }
