@@ -16,12 +16,30 @@ class Comments
     public function getTreeLevel($level)
     {
         $query = $this->conn->prepare("
-              SELECT comment, left_key, right_key, level, parent_id, timestamp
+              SELECT comment_id, comment, left_key, right_key, level, parent_id, timestamp
               FROM comments
               WHERE level = :level
         ");
 
         $query->bindParam(':level', $level );
+        $query->execute();
+
+        $res = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $res;
+    }
+
+    public function getSubTree($left_key, $right_key)
+    {
+        $query = $this->conn->prepare("
+              SELECT comment_id, comment, left_key, right_key, level, parent_id, timestamp
+              FROM comments
+              WHERE left_key > :left_key AND  right_key < :right_key
+              ORDER BY comment_id,parent_id, level
+        ");
+
+        $query->bindParam(':left_key', $left_key );
+        $query->bindParam(':right_key', $right_key );
         $query->execute();
 
         $res = $query->fetchAll(\PDO::FETCH_ASSOC);

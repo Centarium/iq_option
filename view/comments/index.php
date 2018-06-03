@@ -11,15 +11,9 @@
     <link rel="stylesheet" href="/assets/build/vendor.css" />
 </head>
 
-<div id="nestedTree" role="tree" type="register"
-     data-index_action="<?=$indexAction?>"
-     data-add_node_action="<?=$addNodeAction?>"
-     data-delete_node_action="<?=$deleteNodeAction?>"
-     data-get_subtree_action="<?=$getSubTreeAction?>"
-     data-get_level_action="<?=$getLevelAction?>"
-></div>
+<div id="nestedTree" role="tree"></div>
 
 <script src="/assets/build/manifest.js"></script>
 <script src="/assets/build/vendor.js"></script>
 
-<script src="/assets/build/js/tree.js"></script>
+<script src="/assets/build/js/tree.js?v=<?=time()?>"></script>

@@ -5,52 +5,127 @@ import ReactDOM from 'react-dom';
 /*End region Libraries*/
 
 /*Start region Components*/
-import BackToFrontMediator from './Components/BackToFrontMediator';
 /*End region Components*/
 
-const BTF = new BackToFrontMediator('#nestedTree');
+{debugger}
 
+/**
+ *
+ */
 class NestedTree extends Component
 {
-    constructor()
+    constructor(props)
     {
-        super();
+        super(props);
 
         this.state = {
             data: {},
         };
+
+        this.setRootUrl();
+        this.getActionsUrl();
+    }
+
+    setRootUrl()
+    {
+        this.props.urls.root = document.location.origin + this.props.controllerUrl;
+        this.props.urls.actions = this.props.urls.root + this.props.getActionsUrl;
+    }
+
+    getActionsUrl()
+    {
+        $.ajax({
+            url: this.props.urls.actions,
+            type: 'POST',
+            data: {} ,
+            dataType:'json',
+            beforeSend : function() {},
+            success: (data) => {
+                this.setActionsUrl(data);
+                this.getLevelComments(2);
+            },
+            error:function(data) {}
+        });
+    }
+
+    /**
+     * @param data
+     */
+    setActionsUrl(urls)
+    {
+        this.props.urls.addNode = this.props.urls.root + urls.addNodeAction;
+        this.props.urls.deleteNode = this.props.urls.root + urls.deleteNodeAction;
+        this.props.urls.getLevel = this.props.urls.root + urls.getLevelAction;
+        this.props.urls.getSubTree = this.props.urls.root + urls.getSubTreeAction;
+        this.props.urls.index = this.props.urls.root + urls.indexAction;
     }
 
     getLevelComments(level)
     {
-        console.log('1');
+        $.ajax({
+              url: this.props.urls.getLevel,
+              type: 'POST',
+              data: {
+                  level:level
+              } ,
+              dataType:'json',
+              beforeSend : function() {},
+              success: (data) => {
+                  this.state.data = data;
+                  this.buildTree();
+              },
+              error:function(data) {}
+        });
+    }
+
+    buildTree()
+    {
+        var html= '<ul>';
+
+        this.state.data.map((key,idx) => {
+            html+= '<li>'
+            this.buildNode(level);
+            html+= '</li>'
+        })
+
+        html+= '</ul>';
+    }
+
+    buildNode(level, right_key, left_key)
+    {
+
     }
 
     render(){
         return(
-            <div className="Tree">{this.getLevelComments(1)}</div>
+            <div>123</div>
         );
     }
 }
 
-/*NestedTree.propTypes = {
-    schema: PropTypes.objectOf(
-        PropTypes.object
-    ),
-    initialData: PropTypes.arrayOf(
-        PropTypes.object
-    ),
-    onDataChange: PropTypes.func
-};*/
+NestedTree.propTypes = {
+    urls : PropTypes.shape({
+        root : PropTypes.string.isRequired,
+        index : PropTypes.string.isRequired,
+        actions : PropTypes.string.isRequired,
+        addNode : PropTypes.string.isRequired,
+        deleteNode : PropTypes.string.isRequired,
+        getLevel : PropTypes.string.isRequired,
+        getSubTree : PropTypes.string.isRequired
+    }).isRequired,
+    getActionsUrl : PropTypes.string.isRequired,
+    controllerUrl : PropTypes.string.isRequired
+};
 
 NestedTree.defaultProps = {
-    props : {
-        addNodeAction : BTF.getRegisterData('add_node_action'),
-        //addNodeAction : $('#nestedTree').data('add_node_action'),
-        //indexAction : $('#nestedTree').data('get_tree_action')
-        //indexAction : $('#nestedTree').data('get_tree_action')
-        //indexAction : $('#nestedTree').data('get_tree_action')
-        //indexAction : $('#nestedTree').data('get_tree_action')
+    urls : {
+        root : '',
+        index : '',
+        actions : '',
+        addNode : '',
+        deleteNode : '',
+        getLevel : '',
+        getSubTree : ''
     }
 }
 
@@ -59,7 +134,7 @@ ReactDOM.render(
         <h1>
             Nested Tree Comments
         </h1>
-        <NestedTree />
+        <NestedTree getActionsUrl={'/getActions'} controllerUrl={'/comments'} />
     </div>,
     document.getElementById('nestedTree')
 );
