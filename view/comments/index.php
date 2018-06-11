@@ -9,11 +9,11 @@
 ?>
 <head>
     <link rel="stylesheet" href="/assets/build/vendor.css" />
+    <link rel="stylesheet" href="/assets/build/css/app.css" />
 </head>
 
 <div id="nestedTree" role="tree"></div>
 
 <script src="/assets/build/manifest.js"></script>
 <script src="/assets/build/vendor.js"></script>
-
 <script src="/assets/build/js/tree.js?v=<?=time()?>"></script>

@@ -7,7 +7,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
      .addEntry('js/tree', './assets/jsx/NestedTree.jsx')
-     //.addStyleEntry('css/app', './assets/css/app.scss')
+     .addStyleEntry('css/app', './assets/scss/app.scss')
 
     .createSharedEntry('vendor', [
         'jquery',

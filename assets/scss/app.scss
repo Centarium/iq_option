@@ -1,0 +1,24 @@
+.MessageBody
+{
+  width: 400px;
+  border: 1px solid black;
+}
+.ButtonDelete,.ButtonAddComment
+{
+  float: right;
+}
+.Comment
+{
+  display: inline-block;
+}
+.NewMessageArea
+{
+  width: 100%;
+  height: 150px;
+  margin-top: 10px;
+}
+.newMessageContainer
+{
+  width: 600px;
+  padding: 20px;
+}
