@@ -1,10 +1,10 @@
 <?php
 include_once __DIR__.'/vendor/autoload.php';
 
-use Models\Comments;
+use Fixtures\FixtureComments;
 
 $type = $argv[1];
-$model = new Comments();
+$model = new FixtureComments();
 
 if( $type == '--migrateUp' )
 {

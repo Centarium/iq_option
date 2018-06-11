@@ -3,7 +3,8 @@
   "license": "proprietary",
   "minimum-stability": "dev",
   "require": {
-    "php": "^7.2.5"
+    "php": "^7.2.5",
+    "phpunit/phpunit": "^7"
   },
   "autoload": {
     "psr-4": {
@@ -11,7 +12,9 @@
       "Bundles\\": "bundles/",
       "Models\\" : "models/",
       "Interfaces\\": "interfaces/",
-      "Configs\\": "configs/"
+      "Configs\\": "configs/",
+      "Fixtures\\" : "fixtures/",
+      "Tests\\" : "tests/"
     }
   }
 }

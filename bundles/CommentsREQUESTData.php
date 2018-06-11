@@ -10,7 +10,7 @@ use Interfaces\CommentsData;
  */
 class CommentsREQUESTData implements CommentsData
 {
-    public function getLevel()
+    public function getLevel():int
     {
         $level = intval($_POST['level']);
 
